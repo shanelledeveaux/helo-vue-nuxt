@@ -7,10 +7,10 @@
     >
       <v-toolbar-title>New Post</v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-icon>send</v-icon>
+      <v-icon @click="submit">send</v-icon>
     </v-toolbar>
     <v-form>
-      <v-autocomplete
+      <v-text-field
         v-model="title"
         chips
         label="Title"
@@ -20,7 +20,7 @@
         hide-selected
         multiple
         single-line
-      ></v-autocomplete>
+      ></v-text-field>
       <v-divider></v-divider>
       <div class="container">
         <img class="image-upload" v-if="imageurl.length > 10" v-bind:src="imageurl">
@@ -41,7 +41,7 @@
       ></v-text-field>
       <v-divider></v-divider>
       <v-textarea
-        v-model="message"
+        v-model="content"
         label="Message"
         counter
         maxlength="120"
@@ -53,13 +53,26 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: "Form",
   data: () => ({
     imageurl: "",
     title: "",
-    message: ""
-  })
+    content: ""
+  }),
+  methods: {
+    submit() {
+      axios
+        .post("/api/product", {
+          title: this.title,
+          imageurl: this.imageurl,
+          content: this.content
+        })
+        .then(res => console.log(res));
+    }
+  }
 };
 </script>
 
